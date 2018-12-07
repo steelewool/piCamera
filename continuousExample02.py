@@ -1,6 +1,9 @@
+
 from picamera import PiCamera
 from time import sleep
 from fractions import Fraction
+
+print "continuousExample02.py -merging feature from captureImages.py"
 
 # Force sensor mode 4 (the long exposure mode), set
 # the framerate to 1/6fps, the shutter speed to 6s,
@@ -8,8 +11,11 @@ from fractions import Fraction
 camera = PiCamera(
 #    resolution=(1280, 720),
     resolution=(1640, 1232),
-    framerate=Fraction(1, 10),
+# worked by 1/10 hertz    framerate=Fraction(1, 10),
+    framerate=Fraction(1, 2 ),
     sensor_mode=4)
+
+print 'framerate: ', camera.framerate
 
 # Mode 4 for the V2 will do a 2x2 binning, a resolution of 1640x1233,
 #        support framerates of 1/10 to 15 frames per seconds,
@@ -32,11 +38,13 @@ print 'iso          : ', camera.iso
 print 'sleep 10 seconds'
 sleep(10)
 
-# Finally, capture an image with a 6s exposure. Due
-# to mode switching on the still port, this will take
-# longer than 6 seconds
-print 'capture image'
-
-camera.capture('dark.png')
-camera.close()
-
+try:
+    print 'Enter loop:'
+    for i, filename in enumerate(
+            camera.capture_continuous('image{counter:02d}.jpg')):
+        print(filename)
+        if i == 4:
+            break
+finally:
+    print 'Close camera'
+    camera.close()
