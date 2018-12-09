@@ -5,11 +5,12 @@ from fractions import Fraction
 
     # Print basic information:
 
-print 'captureImages03.py'
+print 'captureImages.py'
+
+camera = PiCamera()
 
 loopForever = True
 while loopForever:
-    camera = PiCamera()
 
     print 'framerate     : ', camera.framerate
     print 'shutter speed : ', camera.shutter_speed
@@ -62,7 +63,6 @@ while loopForever:
 
     numberOfImages = input('Enter number of images to grab : ')
     
-    
 # Mode 4 for the V2 will do a 2x2 binning, a resolution of 1640x1233,
 #        support framerates of 1/10 to 15 frames per seconds,
 #        and uses the entire frame.
@@ -92,15 +92,15 @@ while loopForever:
 # to mode switching on the still port, this will take
 # longer than 6 seconds
 
-    print 'capture image x.png'
+#    print 'capture image x.png'
 
-    camera.capture('x.png')
+#    camera.capture('x.png')
 
     try:
         print 'Enter loop:'
         for i, filename in enumerate(
                 camera.capture_continuous(
-                    'image-{timestamp:%H-%M-%S-%f}.png')):
+                    'image-{timestamp:%Y-%m-%d-%H-%M-%S-%f}.png')):
             print(filename)
             if i == numberOfImages-1:
                 break
