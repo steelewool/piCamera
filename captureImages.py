@@ -1,15 +1,16 @@
+from picamera import PiCamera
 from time import sleep
 from fractions import Fraction
-import picamera
-with picamera.PiCamera() as camera:
-
-    # Looks like this does the open included in the logic:
-    
-    camera.start_preview()
-    camera.exposure_mode = 'off'
+    # camera.exposure_mode = 'verylong'
 
     # Print basic information:
-    
+
+print 'captureImages03.py'
+
+loopForever = True
+while loopForever:
+    camera = PiCamera()
+
     print 'framerate     : ', camera.framerate
     print 'shutter speed : ', camera.shutter_speed
     print 'iso           : ', camera.iso
@@ -24,44 +25,43 @@ with picamera.PiCamera() as camera:
 #    print '              1/10 hertz frame rate'
 #    print '              sensor_mode is 4'
 
-#    camera = PiCamera(
-#        resolution=(1640, 1232),
-#        framerate=Fraction(1, 4),
-#        sensor_mode=4)
+    camera.resolution  = (1640, 1232)
+    camera.sensor_mode = 4
 
 # Changing resolution to 1640x1232 for telescope
 
     print 'Enter shutter speed 0.000001 to 2.0 seconds)'
     shutterSpeedSeconds  = input('Shutter speed (seconds) : ')
-    
-    camera.shutter_speed = int(shutterSpeedSeconds * 1000000)
 
-    print 'Enter ISO, 100, 200, 300, ..., 800'
-    camera.iso = input('ISO: ')
-
-    numberOfImages = input('Enter number of images to grab : ')
-    
-    camera.resolution  = (1640,1232)
-    camera.sensor_mode = 4
-
-    # Set framerate based on the shutter speed.
+# Set framerate based on the shutter speed.
 
     newFrameRate = 2.0 * shutterSpeedSeconds
     print 'newFrameRate: ', newFrameRate
     
     if newFrameRate < 0.250:
         camera.framerate = Fraction(2,1)
+        print 'framerate           : ', camera.framerate
     elif newFrameRate < 0.500:
         camera.framerate = Fraction(1,1)
+        print 'framerate           : ', camera.framerate
     elif newFrameRate < 1.0:
         camera.framerate = Fraction(1,2)
+        print 'framerate           : ', camera.framerate
     elif newFrameRate < 2.5:
         camera.framerate = Fraction(1,5)
-    elif newFrameRate < 5.0:
+        print 'framerate           : ', camera.framerate
+    else:
         camera.framerate = Fraction(1,10)
+        print 'framerate           : ', camera.framerate
 
-    print 'Wait 20 seconds to reset camera.'
-    sleep(20)
+    camera.shutter_speed = int(shutterSpeedSeconds * 1000000.0)
+    print 'exposure speed       : ', camera.exposure_speed
+
+    print 'Enter ISO, 100, 200, 300, ..., 800'
+    camera.iso = input('ISO: ')
+
+    numberOfImages = input('Enter number of images to grab : ')
+    
     
 # Mode 4 for the V2 will do a 2x2 binning, a resolution of 1640x1233,
 #        support framerates of 1/10 to 15 frames per seconds,
@@ -70,12 +70,15 @@ with picamera.PiCamera() as camera:
                            
 # Give the camera a good long time to set gains and
 # measure AWB (you may wish to use fixed AWB instead)
-#
+
+    print 'Sleep for 30 seconds per the example in the documentation.'
+    sleep(30)
+    
+    camera.exposure_mode = 'off'
 
     print 'framerate           : ', camera.framerate
-    print 'framerate           : ', float(camera.framerate)
     print 'shutterSpeedSeconds : ', shutterSpeedSeconds
-    print 'shutter speed       : ', camera.shutter_speed/1000000.0
+    print 'shutter speed       : ', camera.exposure_speed
     print 'iso                 : ', camera.iso
     print 'exposure_mode       : ', camera.exposure_mode
     print 'resolution          : ', camera.resolution
@@ -89,22 +92,31 @@ with picamera.PiCamera() as camera:
 # to mode switching on the still port, this will take
 # longer than 6 seconds
 
+    print 'capture image x.png'
+
+    camera.capture('x.png')
 
     try:
         print 'Enter loop:'
         for i, filename in enumerate(
-                camera.capture_continuous('image{counter:02d}.png')):
+                camera.capture_continuous(
+                    'image-{timestamp:%H-%M-%S-%f}.png')):
             print(filename)
             if i == numberOfImages-1:
                 break
     except:
         print 'except section hit'
-        print 'call stop_preview'
-        camera.stop_preview()
+        #    print 'call camera.close()'
+        #    camera.close()
     finally:
         print 'finally section hit'
-        print 'call stop_preview'
-        camera.stop_preview()
-        # print 'Close camera'
-        # camera.close()
+        #    print 'Call camera.close()'
+        #    camera.close()
 
+    x = input ('Enter 0 to quit, anything else to continue : ')
+    if x == 0:
+        loopForever = False
+
+    camera.exposure_mode = 'auto'
+    
+print 'end of the program'
