@@ -88,14 +88,6 @@ while loopForever:
 #    print 'sleep 10 seconds'
 #    sleep(10)
 
-# Finally, capture an image with a 6s exposure. Due
-# to mode switching on the still port, this will take
-# longer than 6 seconds
-
-#    print 'capture image x.png'
-
-#    camera.capture('x.png')
-
     try:
         print 'Enter loop:'
         for i, filename in enumerate(
@@ -118,5 +110,7 @@ while loopForever:
         loopForever = False
 
     camera.exposure_mode = 'auto'
-    
+
+camera.close()
+
 print 'end of the program'
