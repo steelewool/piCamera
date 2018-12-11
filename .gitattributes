@@ -16,4 +16,5 @@
 *.toc	 binary
 *.pyz	 binary
 *.so	 binary
+dist/*   binary
 
