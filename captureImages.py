@@ -31,8 +31,14 @@ while loopForever:
 # Changing resolution to 1640x1232 for telescope
 
     print 'Enter shutter speed 0.000001 to 10.0 seconds)'
-    shutterSpeedSeconds  = input('Shutter speed (seconds) : ')
-
+    checkInput = True
+    while checkInput:
+        shutterSpeedSeconds  = input('Shutter speed (seconds) : ')
+        if shutterSpeedSeconds < 0.0000001 or shutterSpeedSeconds > 10.0:
+            print 'Out of range, enter a valid shutter time.'
+        else:
+            checkInput = False
+           
 # Set framerate based on the shutter speed.
 
     newFrameRate = 2.0 * shutterSpeedSeconds
