@@ -5,9 +5,11 @@ from fractions import Fraction
 
     # Print basic information:
 
-print 'captureImages.py'
+print 'Running program: captureImages'
 
 camera = PiCamera()
+
+print 'Done with camera constructor'
 
 loopForever = True
 while loopForever:
@@ -31,13 +33,12 @@ while loopForever:
 
 # Changing resolution to 1640x1232 for telescope
 
-    print 'Enter shutter speed 0.000001 to 2.0 seconds)'
+    print 'Enter shutter speed 0.000001 to 10.0 seconds)'
     shutterSpeedSeconds  = input('Shutter speed (seconds) : ')
 
 # Set framerate based on the shutter speed.
 
     newFrameRate = 2.0 * shutterSpeedSeconds
-    print 'newFrameRate: ', newFrameRate
     
     if newFrameRate < 0.250:
         camera.framerate = Fraction(2,1)
@@ -71,8 +72,12 @@ while loopForever:
 # Give the camera a good long time to set gains and
 # measure AWB (you may wish to use fixed AWB instead)
 
-    print 'Sleep for 30 seconds per the example in the documentation.'
-    sleep(30)
+    print 'Sleep for 5 seconds not 30 seconds per the example in the documentation.'
+    sleep (5)
+    #print 'Will sleep as a factor of the shutterSpeedSeconds'
+    #print 'Time to sleep : ', shutterSpeedSeconds*5.0
+    
+    #sleep(shutterSpeedSeconds*5.0)
     
     camera.exposure_mode = 'off'
 
@@ -89,10 +94,10 @@ while loopForever:
 #    sleep(10)
 
     try:
-        print 'Enter loop:'
+        print 'Enter loop to grab ', numerOfImages-1, 'images:'
         for i, filename in enumerate(
                 camera.capture_continuous(
-                    'image-{timestamp:%Y-%m-%d-%H-%M-%S-%f}.png')):
+                    '/home/pi/AstroImages/TestingPiCamera/image-{timestamp:%Y-%m-%d-%H-%M-%S-%f}.png')):
             print(filename)
             if i == numberOfImages-1:
                 break
@@ -102,8 +107,6 @@ while loopForever:
         #    camera.close()
     finally:
         print 'finally section hit'
-        #    print 'Call camera.close()'
-        #    camera.close()
 
     x = input ('Enter 0 to quit, anything else to continue : ')
     if x == 0:
@@ -111,6 +114,6 @@ while loopForever:
 
     camera.exposure_mode = 'auto'
 
-camera.close()
+# camera.close()
 
 print 'end of the program'
