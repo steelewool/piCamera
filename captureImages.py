@@ -1,9 +1,6 @@
 from picamera import PiCamera
 from time import sleep
 from fractions import Fraction
-    # camera.exposure_mode = 'verylong'
-
-    # Print basic information:
 
 print 'Running program: captureImages'
 
@@ -72,12 +69,8 @@ while loopForever:
 # Give the camera a good long time to set gains and
 # measure AWB (you may wish to use fixed AWB instead)
 
-    print 'Sleep for 5 seconds not 30 seconds per the example in the documentation.'
-    sleep (5)
-    #print 'Will sleep as a factor of the shutterSpeedSeconds'
-    #print 'Time to sleep : ', shutterSpeedSeconds*5.0
-    
-    #sleep(shutterSpeedSeconds*5.0)
+    print 'Sleep 30 seconds per the recommendation from documentation'
+    sleep (30)
     
     camera.exposure_mode = 'off'
 
@@ -89,12 +82,8 @@ while loopForever:
     print 'resolution          : ', camera.resolution
     print 'sensor_mode         : ', camera.sensor_mode
 
-# worked but will try a smaller number: sleep(30)
-#    print 'sleep 10 seconds'
-#    sleep(10)
-
     try:
-        print 'Enter loop to grab ', numerOfImages-1, 'images:'
+        print 'Enter loop to grab ', numberOfImages, 'images:'
         for i, filename in enumerate(
                 camera.capture_continuous(
                     '/home/pi/AstroImages/TestingPiCamera/image-{timestamp:%Y-%m-%d-%H-%M-%S-%f}.png')):
