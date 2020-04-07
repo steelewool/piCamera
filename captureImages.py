@@ -91,8 +91,10 @@ while loopForever:
     try:
         print 'Enter loop to grab ', numberOfImages, 'images:'
         for i, filename in enumerate(
+#                camera.capture_continuous(
+#                    '/home/pi/AstroImages/TestingPiCamera/image-{timestamp:%Y-%m-%d-%H-%M-%S-%f}.png')):
                 camera.capture_continuous(
-                    '/home/pi/AstroImages/TestingPiCamera/image-{timestamp:%Y-%m-%d-%H-%M-%S-%f}.png')):
+                    '/home/pi/git/piCamera/images/image-{timestamp:%Y-%m-%d-%H-%M-%S-%f}.png')):
             print(filename)
             if i == numberOfImages-1:
                 break
